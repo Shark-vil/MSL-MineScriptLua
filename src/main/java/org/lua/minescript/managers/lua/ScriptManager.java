@@ -27,7 +27,7 @@ public class ScriptManager {
 
         private void SetPath(String Path) {
             this.Path = Path;
-            this.RelativePath = Path.replaceAll("^plugins\\\\MLua\\\\addons\\\\(\\w*)\\\\", "");
+            this.RelativePath = Path.replaceAll("^plugins\\\\" + Main.pluginName + "\\\\addons\\\\(\\w*)\\\\", "");
         }
 
         public String Path;
@@ -56,7 +56,7 @@ public class ScriptManager {
 
                 Scripts.add(n_Script);
 
-                if (!AddonsDirsPath.stream().anyMatch(x -> x.equals(FullAddonPath))) {
+                if (AddonsDirsPath.stream().noneMatch(x -> x.equals(FullAddonPath))) {
                     AddonsDirsPath.add(FullAddonPath);
                 }
 
