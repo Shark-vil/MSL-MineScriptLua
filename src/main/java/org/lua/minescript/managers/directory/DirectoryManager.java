@@ -17,7 +17,7 @@ public class DirectoryManager {
     {
         PluginDirectoryPath = Path;
         Main.console.sendMessage("PluginDirectoryPath - " + PluginDirectoryPath);
-        AddonsDirectoryPath = PluginDirectoryPath + "/addons";
+        AddonsDirectoryPath = PluginDirectoryPath + "\\addons";
         Main.console.sendMessage("AddonsDirectoryPath - " + AddonsDirectoryPath);
     }
 

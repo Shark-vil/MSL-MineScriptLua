@@ -7,6 +7,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.lua.minescript.managers.directory.DirectoryManager;
 
+import java.io.IOException;
+
 public class Main extends JavaPlugin {
     public static final String pluginName = "MineScript";
     public static final ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
@@ -19,6 +21,8 @@ public class Main extends JavaPlugin {
 
         DirectoryManager.SetPluginPath(this.getDataFolder().getPath());
         DirectoryManager.CreatePluginDirectory();
+
+        LuaMachine L_State = new LuaMachine(this);
 
         console.sendMessage(ChatColor.AQUA + "Plugin \""+ pluginName + "\" loaded");
     }
