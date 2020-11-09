@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.lua.minescript.managers.directory.DirectoryManager;
 
 public class Main extends JavaPlugin {
     public static final String pluginName = "MineScript";
@@ -15,6 +16,10 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         console.sendMessage(ChatColor.AQUA + "Loading the \""+ pluginName + "\" plugin");
         plugin = this;
+
+        DirectoryManager.SetPluginPath(this.getDataFolder().getPath());
+        DirectoryManager.CreatePluginDirectory();
+
         console.sendMessage(ChatColor.AQUA + "Plugin \""+ pluginName + "\" loaded");
     }
 }
