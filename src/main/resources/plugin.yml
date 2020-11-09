@@ -1,0 +1,4 @@
+name: MineScript
+version: ${project.version}
+main: org.lua.minescript.Main
+author: Shark_vil
