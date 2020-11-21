@@ -11,7 +11,7 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 public class LuaMachine {
     public static final Globals vm = JsePlatform.standardGlobals();
 
-    public LuaMachine(JavaPlugin plugin) {
+    public LuaMachine() {
         MainLuaLoader.load();
 
         // Script search

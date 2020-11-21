@@ -27,7 +27,7 @@ public class Main extends JavaPlugin {
         DirectoryManager.CreatePluginDirectory();
 
         MainMinecraftLoader.loader();
-        LuaMachine L_State = new LuaMachine(this);
+        LuaMachine L_State = new LuaMachine();
 
         console.sendMessage(ChatColor.AQUA + "Plugin \""+ pluginName + "\" loaded");
     }
