@@ -4,8 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.lua.minescript.managers.directory.DirectoryManager;
+import org.lua.minescript.minecraft.loaders.MainMinecraftLoader;
 
 import java.io.IOException;
 
@@ -13,15 +15,18 @@ public class Main extends JavaPlugin {
     public static final String pluginName = "MineScript";
     public static final ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
     public static Plugin plugin;
+    public static PluginManager pluginManager;
 
     @Override
     public void onEnable() {
         console.sendMessage(ChatColor.AQUA + "Loading the \""+ pluginName + "\" plugin");
         plugin = this;
+        pluginManager = this.getServer().getPluginManager();
 
         DirectoryManager.SetPluginPath(this.getDataFolder().getPath());
         DirectoryManager.CreatePluginDirectory();
 
+        MainMinecraftLoader.loader();
         LuaMachine L_State = new LuaMachine(this);
 
         console.sendMessage(ChatColor.AQUA + "Plugin \""+ pluginName + "\" loaded");
