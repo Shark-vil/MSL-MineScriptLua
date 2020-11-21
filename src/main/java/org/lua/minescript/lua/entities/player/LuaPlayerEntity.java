@@ -27,9 +27,7 @@ public class LuaPlayerEntity {
     }
 
     private LuaValue GetMetatable() {
-        LuaTable Meta = new LuaConverter<Player>().ConvertToLua(bukkitPlayer);
-        LuaTable Library = Meta.getmetatable().checktable();
-        return Meta;
+        return new LuaConverter<Player>().ConvertToLua(bukkitPlayer);
     }
 
     private class GetBukkitEntity extends ZeroArgFunction {
