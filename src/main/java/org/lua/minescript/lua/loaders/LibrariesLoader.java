@@ -16,5 +16,8 @@ public class LibrariesLoader {
         LuaMachine.vm.set("CurTime", new L_CurTime());
         LuaMachine.vm.set("RealTime", new L_RealTime());
         LuaMachine.vm.set("UnixTime", new L_UnixTime());
+
+        L_CurTime.Execute();
+        L_RealTime.Execute();
     }
 }
