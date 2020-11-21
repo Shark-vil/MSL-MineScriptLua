@@ -11,10 +11,8 @@ import org.lua.minescript.minecraft.events.java.timer.JE_Timer;
 public class LibrariesLoader {
     public static void load() {
         TimeLibraryLoader();
-
         LuaMachine.vm.set("hook", L_Hook.GetLibrary());
-
-        TimerLibraryLoader();
+        LuaMachine.vm.set("timer", L_Timer.GetLibrary());
     }
 
     private static void TimeLibraryLoader() {
@@ -24,10 +22,5 @@ public class LibrariesLoader {
 
         L_CurTime.Execute();
         L_RealTime.Execute();
-    }
-
-    private static void TimerLibraryLoader() {
-        LuaMachine.vm.set("timer", L_Timer.GetLibrary());
-        JE_Timer.Register();
     }
 }
