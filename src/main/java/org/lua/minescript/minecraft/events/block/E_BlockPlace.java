@@ -33,9 +33,9 @@ public class E_BlockPlace implements Listener {
         };
 
         for(HookModel HookItem : Hooks) {
-            LuaValue Result = (LuaValue) HookItem.Function.invoke(LuaValue.varargsOf(Args));
-            if (Result.isboolean() && !Result.checkboolean()) {
-                e.setCancelled(true);
+            LuaValue Result = (LuaValue) HookItem.Function.invoke(Args);
+            if (Result.isboolean()) {
+                e.setCancelled(Result.checkboolean());
                 break;
             }
         }
