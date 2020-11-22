@@ -1,5 +1,6 @@
 package org.lua.minescript.converter;
 
+import org.lua.minescript.storage.cache.CacheStorage;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.TwoArgFunction;
@@ -8,14 +9,22 @@ import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.CoerceLuaToJava;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 public class LuaConverter<T> {
-    public LuaTable ConvertToLua(T javaObject) {
+    public LuaValue ConvertToLua(T javaObject) {
+        int IdEntity = javaObject.hashCode();
+
+        //LuaValue CacheItem = new CacheStorage<T>().GetLuaObjectFromJava(javaObject);
+        LuaValue CacheItem = CacheStorage.GetById(IdEntity);
+        if (!CacheItem.isnil())
+            return CacheItem;
+
         LuaTable Meta = new LuaTable();
         LuaTable Library = new LuaTable();
 
         GetBukkitEntity<T> bukkitEntity = new GetBukkitEntity<T>(javaObject);
-        Library.set("id", javaObject.hashCode());
+        Library.set("id", IdEntity);
         Library.set("bukkit", bukkitEntity);
         Library.set("library", Library);
 
@@ -23,6 +32,7 @@ public class LuaConverter<T> {
         Library.set(LuaValue.CALL, bukkitEntity);
 
         Meta.setmetatable(Library);
+
         return Meta;
     }
 
