@@ -15,7 +15,7 @@ public class LibrariesLoader {
         LuaMachine.vm.set("hook", L_Hook.GetLibrary());
         LuaMachine.vm.set("timer", L_Timer.GetLibrary());
         LuaMachine.vm.set("cache", L_Cache.GetLibrary());
-        LuaMachine.vm.set("concommand", L_Command.GetLibrary());
+        LuaMachine.vm.set("command", L_Command.GetLibrary());
     }
 
     private static void TimeLibraryLoader() {
