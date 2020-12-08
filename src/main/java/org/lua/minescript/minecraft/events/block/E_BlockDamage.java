@@ -12,6 +12,7 @@ import org.lua.minescript.models.hook.HookModel;
 import org.lua.minescript.storage.player.PlayersStorage;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class E_BlockDamage implements Listener {
     public void OnBlockDamage(BlockDamageEvent e) {
         List<HookModel> Hooks = L_Hook.GetAllHooksByType("BlockDamage");
 
+        LuaValue l_Event = CoerceJavaToLua.coerce(e);
         LuaValue l_Player = PlayersStorage.Get(e.getPlayer()).GetLuaEntity();
         LuaValue l_Block = new LuaConverter<Block>().ConvertToLua(e.getBlock());
         LuaValue l_ItemInHand = new LuaConverter<ItemStack>().ConvertToLua(e.getItemInHand());
@@ -30,18 +32,25 @@ public class E_BlockDamage implements Listener {
         };
 
         for(HookModel HookItem : Hooks) {
-            Varargs ArgsResult = HookItem.Function.invoke(Args);
+            Varargs ArgsResult;
 
-            LuaValue a_Cancelled = ArgsResult.arg(1);
-            LuaValue a_InstaBreak = ArgsResult.arg(2);
+            if (HookItem.IsEvent)
+                ArgsResult = HookItem.Function.call(l_Event);
+            else {
+                ArgsResult = HookItem.Function.invoke(Args);
 
-            if (a_InstaBreak.isboolean())
-                e.setInstaBreak(a_InstaBreak.checkboolean());
+                LuaValue a_Cancelled = ArgsResult.arg(1);
+                LuaValue a_InstaBreak = ArgsResult.arg(2);
 
-            if (a_Cancelled.isboolean()) {
-                e.setCancelled(a_Cancelled.checkboolean());
-                return;
+                if (a_InstaBreak.isboolean())
+                    e.setInstaBreak(a_InstaBreak.checkboolean());
+
+                if (a_Cancelled.isboolean())
+                    e.setCancelled(a_Cancelled.checkboolean());
             }
+
+            if (!ArgsResult.isnil(1))
+                return;;
         }
     }
 }

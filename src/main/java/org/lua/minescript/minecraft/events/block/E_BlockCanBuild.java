@@ -22,6 +22,7 @@ public class E_BlockCanBuild implements Listener {
     public void OnBlockCanBuild(BlockCanBuildEvent e) {
         List<HookModel> Hooks = L_Hook.GetAllHooksByType("BlockCanBuild");
 
+        LuaValue l_Event = CoerceJavaToLua.coerce(e);
         LuaValue l_Player = PlayersStorage.Get(e.getPlayer()).GetLuaEntity();
         LuaValue l_Block = new LuaConverter<Block>().ConvertToLua(e.getBlock());
         LuaValue l_Material = new LuaConverter<Material>().ConvertToLua(e.getMaterial());
@@ -32,11 +33,19 @@ public class E_BlockCanBuild implements Listener {
         };
 
         for(HookModel HookItem : Hooks) {
-            LuaValue Result = (LuaValue) HookItem.Function.invoke(Args);
-            if (Result.isboolean()) {
-                e.setBuildable(Result.checkboolean());
-                return;
+            LuaValue Result;
+
+            if (HookItem.IsEvent)
+                Result = HookItem.Function.call(l_Event);
+            else {
+                Result = (LuaValue) HookItem.Function.invoke(Args);
+
+                if (Result.isboolean())
+                    e.setBuildable(Result.checkboolean());
             }
+
+            if (!Result.isnil())
+                return;;
         }
     }
 }

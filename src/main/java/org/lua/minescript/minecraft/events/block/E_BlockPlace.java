@@ -21,6 +21,7 @@ public class E_BlockPlace implements Listener {
     public void OnBlockPlace(BlockPlaceEvent e) {
         List<HookModel> Hooks = L_Hook.GetAllHooksByType("BlockPlace");
 
+        LuaValue l_Event = CoerceJavaToLua.coerce(e);
         LuaValue Player = PlayersStorage.Get(e.getPlayer()).GetLuaEntity();
         LuaValue Block = new LuaConverter<Block>().ConvertToLua(e.getBlock());
         LuaValue BlockReplacedState = new LuaConverter<BlockState>().ConvertToLua(e.getBlockReplacedState());
@@ -33,11 +34,19 @@ public class E_BlockPlace implements Listener {
         };
 
         for(HookModel HookItem : Hooks) {
-            LuaValue Result = (LuaValue) HookItem.Function.invoke(Args);
-            if (Result.isboolean()) {
-                e.setCancelled(Result.checkboolean());
-                break;
+            LuaValue Result;
+
+            if (HookItem.IsEvent)
+                Result = HookItem.Function.call(l_Event);
+            else {
+                Result = (LuaValue) HookItem.Function.invoke(Args);
+
+                if (Result.isboolean())
+                    e.setCancelled(Result.checkboolean());
             }
+
+            if (!Result.isnil())
+                return;;
         }
     }
 }

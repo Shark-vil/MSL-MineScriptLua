@@ -11,6 +11,7 @@ import org.lua.minescript.lua.libraries.hook.L_Hook;
 import org.lua.minescript.models.hook.HookModel;
 import org.lua.minescript.storage.player.PlayersStorage;
 import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 import java.util.List;
 
@@ -19,15 +20,24 @@ public class E_BlockBreak implements Listener {
     public void OnBlockBreak(BlockBreakEvent e) {
         List<HookModel> Hooks = L_Hook.GetAllHooksByType("BlockBreak");
 
+        LuaValue l_Event = CoerceJavaToLua.coerce(e);
         LuaValue l_Player = PlayersStorage.Get(e.getPlayer()).GetLuaEntity();
         LuaValue l_Block = new LuaConverter<Block>().ConvertToLua(e.getBlock());
 
         for(HookModel HookItem : Hooks) {
-            LuaValue Result = HookItem.Function.call(l_Player, l_Block);
-            if (Result.isboolean()) {
-                e.setCancelled(Result.checkboolean());
-                return;
+            LuaValue Result;
+
+            if (HookItem.IsEvent)
+                Result = HookItem.Function.call(l_Event);
+            else {
+                Result = HookItem.Function.call(l_Player, l_Block);
+
+                if (Result.isboolean())
+                    e.setCancelled(Result.checkboolean());
             }
+
+            if (!Result.isnil())
+                return;;
         }
     }
 }
