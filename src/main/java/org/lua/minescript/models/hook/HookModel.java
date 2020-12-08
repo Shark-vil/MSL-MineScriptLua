@@ -14,4 +14,5 @@ public class HookModel {
     public String Type;
     public String Name;
     public LuaValue Function;
+    public boolean IsEvent = false;
 }

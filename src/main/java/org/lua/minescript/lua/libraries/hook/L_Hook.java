@@ -21,10 +21,25 @@ public class L_Hook {
     {
         LuaValue library = new LuaTable();
         library.set("Add", new Add());
+        library.set("AddEvent", new AddEvent());
         library.set("Call", new Call());
         library.set("Run", new Run());
         library.set("Remove", new Remove());
         return library;
+    }
+
+    public static class AddEvent extends VarArgFunction {
+        @Override
+        public Varargs onInvoke(Varargs args) {
+            String n_Type = args.arg(1).checkjstring();
+            String n_Name = args.arg(2).checkjstring();
+            if (args.arg(3).isnumber())
+                Add.Execute(n_Type, n_Name, args.arg(3).checkint(), args.arg(4).checkfunction(), true);
+            else
+                Add.Execute(n_Type, n_Name, args.arg(3).checkfunction(), true);
+
+            return NIL;
+        }
     }
 
     public static class Add extends VarArgFunction {
@@ -33,7 +48,7 @@ public class L_Hook {
             String n_Type = args.arg(1).checkjstring();
             String n_Name = args.arg(2).checkjstring();
             if (args.arg(3).isnumber())
-                Execute(n_Type, n_Name, args.arg(3).checkint(), args.arg(4).checkfunction());
+                Execute(n_Type, n_Name, args.arg(3).checkint(), args.arg(4).checkfunction(), false);
             else
                 Execute(n_Type, n_Name, args.arg(3).checkfunction());
 
@@ -42,12 +57,18 @@ public class L_Hook {
 
         public static void Execute(String Type, String Name, LuaValue HookFunction)
         {
-            Execute(Type, Name, 0, HookFunction);
+            Execute(Type, Name, 0, HookFunction, false);
         }
 
-        public static void Execute(String Type, String Name, int Index, LuaValue HookFunction)
+        public static void Execute(String Type, String Name, LuaValue HookFunction, boolean IsEvent)
+        {
+            Execute(Type, Name, 0, HookFunction, IsEvent);
+        }
+
+        public static void Execute(String Type, String Name, int Index, LuaValue HookFunction, boolean IsEvent)
         {
             HookModel n_Hook = new HookModel(Type, Name, Index, HookFunction);
+            n_Hook.IsEvent = IsEvent;
 
             boolean IsHookExists = false;
             for(int i = 0; i < AllHooks.size(); i++) {
