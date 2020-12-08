@@ -31,7 +31,7 @@ public class E_BlockBurn implements Listener {
                 Result = HookItem.Function.call(l_Block, l_IgnitingBlock);
 
                 if (Result.isboolean())
-                    e.setCancelled(Result.checkboolean());
+                    e.setCancelled(!Result.checkboolean());
             }
 
             if (!Result.isnil())

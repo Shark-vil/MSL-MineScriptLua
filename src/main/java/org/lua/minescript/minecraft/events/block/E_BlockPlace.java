@@ -42,7 +42,7 @@ public class E_BlockPlace implements Listener {
                 Result = (LuaValue) HookItem.Function.invoke(Args);
 
                 if (Result.isboolean())
-                    e.setCancelled(Result.checkboolean());
+                    e.setCancelled(!Result.checkboolean());
             }
 
             if (!Result.isnil())

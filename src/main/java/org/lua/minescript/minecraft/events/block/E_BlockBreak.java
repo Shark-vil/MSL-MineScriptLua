@@ -33,7 +33,7 @@ public class E_BlockBreak implements Listener {
                 Result = HookItem.Function.call(l_Player, l_Block);
 
                 if (Result.isboolean())
-                    e.setCancelled(Result.checkboolean());
+                    e.setCancelled(!Result.checkboolean());
             }
 
             if (!Result.isnil())

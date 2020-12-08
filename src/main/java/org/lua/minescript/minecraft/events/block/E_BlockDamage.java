@@ -46,7 +46,7 @@ public class E_BlockDamage implements Listener {
                     e.setInstaBreak(a_InstaBreak.checkboolean());
 
                 if (a_Cancelled.isboolean())
-                    e.setCancelled(a_Cancelled.checkboolean());
+                    e.setCancelled(!a_Cancelled.checkboolean());
             }
 
             if (!ArgsResult.isnil(1))
